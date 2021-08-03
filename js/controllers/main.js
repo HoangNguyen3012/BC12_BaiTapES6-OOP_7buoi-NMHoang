@@ -118,9 +118,3 @@ function checkCompleted(id, content, type){
 }
 window.checkCompleted = checkCompleted;
 // Check Completed Button ends
-
-// Sort ascending function
-getEle('two').addEventListener('click', () => {
-    console.log(getLocalStorage())
-})
-// Sort ascending function ends
