@@ -9,82 +9,106 @@ const getEle = function (id) {
 // Default Functions end
 
 const activityService = new ActivityService();
-let toDoList = [];
+let activityList = [];
+// let completedList = [];
 
 //Render HTML Function
 const renderHTML = () => {
-    let content = '';
+    // Displaying to do items from filtered activityList
+    activityList.filter(activity => activity.type === 1).map((toDo,index) => {
+        getEle('todo').innerHTML += toDo.renderActivity();
+    });
+
+    // Displaying completed items from filtered activityList
+    activityList.filter(activity => activity.type === 2).map((completed,index) => {
+        getEle('completed').innerHTML += completed.renderActivity();
+    });
+
+};
+//Render HTML Function ends
+
+//display Activity Function
+const displayActivity = () => {
+    // get data from axios
     activityService
         .fetchActivity()
         .then(res => {
-            console.log(res.data)
-            res.data.map((activity, index) => {
-                content += `
-                <li>
-
-                    <span>${activity.activity}</span>
-                    <div>
-                        
-                        <i class="fa fa-times-circle" onclick ="removeActivityFromList('${activity.id}');"></i>
-
-                       <i class="fa fa-check-circle" onclick="checkCompleted('${activity.id}')"></i>                      
-                    </div>
-
-
-                </li>
-            `;
+            res.data.forEach(activity => {
+                const { id, content, type } = activity;
+                switch (type) {
+                    case 1: // To do
+                        const toDo = new ToDo(
+                            id,
+                            content,
+                            type
+                        );
+                        // append item to activityList
+                        activityList = [...activityList, toDo];
+                        // console.log(activityList)
+                        break;
+                    case 2: // Completed
+                        const completed = new Completed(
+                            id,
+                            content,
+                            type
+                        );
+                        // append item to activityList
+                        activityList = [...activityList, completed];
+                        break;
+                    default:
+                        console.log( id, 'Not an activity');
+                }
             });
-            getEle('todo').innerHTML = content;
+            // console.log(activityList)
+            // Displaying on html
+            renderHTML();
         });
-};
-renderHTML();
-//Render HTML Function ends
-
-//Render Activity Function
-// const renderActivity = () => {
-//     activityList = [...activityList, activity];
-//     console.log(activityList);
-//     renderHTML();
-// }
-//Render Activity Function ends
+}
+displayActivity();
+//display Activity Function ends
 
 // Add Activity Function
 function addActivity() {
-    console.log('object');
-    let activity = new ToDo(
+    // alert('push')
+    let toDo = new ToDo(
         activityList.length,
-        getEle('newTask').value
+        getEle('newTask').value,
+        1
     );
     activityService
-        .addActivity(activity)
-        .then(res => {
-            console.log(activity)
-            toDoList = [...toDoList, activity];
-            renderHTML();
-        })
+        .addActivity(toDo)
+        .then(res => { // add a to do Activity
+            getEle('todo').innerHTML += toDo.renderActivity();
+        });
     getEle('newTask').value = '';
 }
 // Add Activity Function ends
 
 // Remove Activity button
-function removeActivityFromList(id) {
-    console.log('object')
-    activityService
-    .removeActivity(id)
-    .then(res => {
-        toDoList.splice(id, 1);
-    })
-}
+// function removeActivityFromList(id) {
+//     activityService
+//         .removeActivity(id)
+//         .then(res => {
+//             toDoList.splice(id, 1);
+//             renderHTML();
+//         })
+// }
+// window.removeActivityFromList = removeActivityFromList;
 // Remove Activity button ends
 
 // Check Completed Button
-function checkCompleted(id){
-    console.log('object')
-}
+// function checkCompleted(id, activity){
+//     console.log('object')
+//     removeActivityFromList(id); // Remove from to do list
+//     let activity = new Completed(
+//         completedList.length,
+//         activity
+//     )
+//     completedList = [...completedList, activity]
+// }
+// window.checkCompleted = checkCompleted;
 // Check Completed Button ends
 
 // Trigger button
-getEle('addItem').onclick = function () {
-    addActivity();
-}
+getEle('addItem').onclick = addActivity;
 // Trigger button ends

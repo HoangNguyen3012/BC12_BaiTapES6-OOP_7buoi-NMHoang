@@ -1,15 +1,12 @@
 import Activity from "./Activity.js";
 
 class ToDo extends Activity {
-    constructor(id, activity) {
-        super(id, activity);
+    constructor(id, content, type) {
+        super(id, content, type);
     };
     renderActivity() {
-        return `
-        <div>
-            ABCD
-        </div>
-        `
+        return super.renderActivity();
+        
     }
 }
 
