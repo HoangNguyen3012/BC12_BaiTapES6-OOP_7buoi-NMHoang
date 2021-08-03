@@ -18,4 +18,11 @@ export default class ActivityService {
             data: activity,
         })
     }
+    updateActivity(id, activity) {
+        return axios({
+            url: `https://60ea735d5dd7ff0017b39775.mockapi.io/ToDoList/${id}`,
+            method: 'PUT',
+            data: activity,
+        })
+    }
 }

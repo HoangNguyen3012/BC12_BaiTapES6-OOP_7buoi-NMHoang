@@ -1,6 +1,6 @@
 export default class Activity {
-    constructor(id, content, type) {
-        this.id = id;
+    constructor( content, type) {
+        // this.id = id;
         this.content = content;
         this.type = type;
     };
@@ -9,9 +9,9 @@ export default class Activity {
         <li>
             <span>${this.content}</span>
             <div>
-                <i class="fa fa-times-circle" onclick ="removeActivityFromList('${this.id}');"></i>
+                <i class="fa fa-times-circle" onclick ="removeActivityFromList('${id}');"></i>
 
-                <i class="fa fa-check-circle" onclick="checkCompleted('${this.id}', '${this.content}')"></i>                      
+                <i class="fa fa-check-circle" onclick="checkCompleted('${id}', '${this.content}', '${this.type}')"></i>                      
             </div>
         </li>
         `
